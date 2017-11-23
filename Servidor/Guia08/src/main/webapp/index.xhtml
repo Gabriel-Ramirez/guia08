@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:componentes="http://xmlns.jcp.org/jsf/composite/componentes">
+    <h:head>
+        <title>Tipo Post</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./WEB-INF/Resourse/newTemplate.xhtml">
+            <ui:define name="content"> 
+                <f:view>
+                    <h1 align="center">#{PropiedadesGenerales['tbl.tipoPost']}</h1>
+
+                    <h:form id="for">
+                    
+                        <div>
+                            <p:dataTable value="#{tpBean.listaDatos}" var="item" id ="tabla" rows="5" paginator="true" selectionMode="single" selection="#{tpBean.tipoPostEntity}" rowKey="#{item.idTipoPost}" sortBy="#{item.idTipoPost}">
+                                <p:ajax event="rowSelect" listener="#{tpBean.onRowSelect}" update=":frmRegistros"/>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{PropiedadesGenerales['tbl.tipoPost']}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idTipoPost}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{PropiedadesGenerales['tbl.nombre']}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.nombre}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{PropiedadesGenerales['tbl.activo']}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.activo}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{PropiedadesGenerales['tbl.descripcion']}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.descripcion}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </h:form>
+                </f:view>
+                <br/>
+                <f:view>
+                    <h:form id="frmRegistros">
+                        <p:growl id="growl" showDetail="true" sticky="true"/>
+                        <h2>
+                            #{PropiedadesGenerales['tbl.crearEditar']} 
+                        </h2>
+                        <div align="center">
+                            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                        </div>
+                        <p:panelGrid id="grid_input" columns="2">
+                            <componentes:tabla GenericManagedBean="#{tpBean}"/>
+                        </p:panelGrid>
+                       
+                        <div style="">
+                            <p:panel visible="#{!tpBean.btnVisible}" style="border: none">
+                                <componentes:botonesDeRegistro GenericManagedBean="#{tpBean}"/>
+                                <p:commandButton value="#{PropiedadesGenerales['crud.btn.limpiar']}" update="grid_input" process="@this" />
+                            </p:panel>
+                            <p:panel visible="#{tpBean.btnVisible}" style="border: none">
+                                <componentes:botonesEditar GenericManagedBean="#{tpBean}"/>
+                                <p:commandButton value="#{PropiedadesGenerales['crud.btn.cancelar']}" immediate="true">
+                                <p:ajax listener="#{tpBean.btnCancelar()}" update="@form :for"/>
+                                </p:commandButton>
+                            </p:panel>
+                        </div>
+                    </h:form>
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
